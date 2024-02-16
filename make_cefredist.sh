@@ -1,10 +1,10 @@
 TMP="tmp-$1"
-OUTPUT="../package-$1"
+OUTPUT="./package-$1"
 
-if [ "$1" == "osx64" ]; then 
-    ARCH="macosx64";
+if [ "$1" == "linux64" ]; then 
+    ARCH="linux64";
 else
-    ARCH="macosarm64";
+    ARCH="linuxarm64";
 fi
 
 if [ ! -d "$TMP" ]; then
@@ -15,15 +15,18 @@ cd "$TMP"
 
 rm -rf "$OUTPUT"
 mkdir "$OUTPUT"
-mkdir "$OUTPUT/CEF"
-mkdir "$OUTPUT/CEF/Resources"
 
 CEFZIP="cef.tar.bz2"
 CEFBINARIES="cef_binaries"
 
 if [ ! -f "$CEFZIP" ]; then
     echo "downloading cef binaries"
-    curl -o "$CEFZIP" "https://cef-builds.spotifycdn.com/cef_binary_120.1.8%2Bge6b45b0%2Bchromium-120.0.6099.109_{$ARCH}_minimal.tar.bz2"
+    if ! command -v aria2c &> /dev/null
+    then
+    	curl -o "$CEFZIP" "https://cef-builds.spotifycdn.com/cef_binary_120.1.8%2Bge6b45b0%2Bchromium-120.0.6099.109_${ARCH}_minimal.tar.bz2"
+    else
+    	aria2c -o "$CEFZIP" "https://cef-builds.spotifycdn.com/cef_binary_120.1.8%2Bge6b45b0%2Bchromium-120.0.6099.109_${ARCH}_minimal.tar.bz2"
+    fi
 fi
 
 if [ ! -d "$CEFBINARIES" ]; then
@@ -31,10 +34,14 @@ if [ ! -d "$CEFBINARIES" ]; then
     mkdir "$CEFBINARIES"
     tar -jxvf "$CEFZIP" -C "./$CEFBINARIES"
 fi
-
-CEFFRAMEWORK_DIR="$(find $CEFBINARIES -name "Release")/Chromium Embedded Framework.framework"
-
-cp "$CEFFRAMEWORK_DIR/Chromium Embedded Framework" "$OUTPUT/CEF/libcef.dylib"
-cp "$CEFFRAMEWORK_DIR/Libraries/"* "$OUTPUT/CEF/"
-cp "$CEFFRAMEWORK_DIR/Resources/"* "$OUTPUT/CEF/Resources/"
-cp "$CEFFRAMEWORK_DIR/Resources/en.lproj/"* "$OUTPUT/CEF/Resources/"
+echo "copying cef binaries"
+cp -va "${PWD}/$(find $CEFBINARIES -name "Release")/." "$OUTPUT/CEF/"
+echo "stripping cef binaries"
+strip -v -s "${OUTPUT}/CEF/libcef.so"
+strip -v -s "${OUTPUT}/CEF/libEGL.so"
+strip -v -s "${OUTPUT}/CEF/libGLESv2.so"
+strip -v -s "${OUTPUT}/CEF/libvk_swiftshader.so"
+strip -v -s "${OUTPUT}/CEF/libvulkan.so.1"
+cd .. || exit 1
+cd "$TMP" || exit 1
+cp -Rv "${PWD}/$(find $CEFBINARIES -name "Resources")/." "$OUTPUT/CEF/"
