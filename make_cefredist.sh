@@ -37,11 +37,19 @@ fi
 echo "copying cef binaries"
 cp -va "${PWD}/$(find $CEFBINARIES -name "Release")/." "$OUTPUT/CEF/"
 echo "stripping cef binaries"
-strip -v -s "${OUTPUT}/CEF/libcef.so"
-strip -v -s "${OUTPUT}/CEF/libEGL.so"
-strip -v -s "${OUTPUT}/CEF/libGLESv2.so"
-strip -v -s "${OUTPUT}/CEF/libvk_swiftshader.so"
-strip -v -s "${OUTPUT}/CEF/libvulkan.so.1"
+if [ "$1" == "linux64" ]; then 
+	strip -v -s "${OUTPUT}/CEF/libcef.so"
+	strip -v -s "${OUTPUT}/CEF/libEGL.so"
+	strip -v -s "${OUTPUT}/CEF/libGLESv2.so"
+	strip -v -s "${OUTPUT}/CEF/libvk_swiftshader.so"
+	strip -v -s "${OUTPUT}/CEF/libvulkan.so.1"
+else
+	aarch64-linux-gnu-strip -v -s "${OUTPUT}/CEF/libcef.so"
+	aarch64-linux-gnu-strip -v -s "${OUTPUT}/CEF/libEGL.so"
+	aarch64-linux-gnu-strip -v -s "${OUTPUT}/CEF/libGLESv2.so"
+	aarch64-linux-gnu-strip -v -s "${OUTPUT}/CEF/libvk_swiftshader.so"
+	aarch64-linux-gnu-strip -v -s "${OUTPUT}/CEF/libvulkan.so.1"
+fi
 cd .. || exit 1
 cd "$TMP" || exit 1
 cp -Rv "${PWD}/$(find $CEFBINARIES -name "Resources")/." "$OUTPUT/CEF/"
