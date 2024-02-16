@@ -12,7 +12,7 @@
     <license type="file">LICENSE.txt</license>
   </metadata>
   <files>
-    <file src="tmp-$id$/package-$id$/**" />
+    <file src="package-$id$/**" />
     <file src="build/cef.redist.$id$.props" target="build/" />
     <file src="LICENSE.txt" target="LICENSE.txt" />
   </files>
