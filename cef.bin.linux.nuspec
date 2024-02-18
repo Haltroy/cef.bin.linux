@@ -10,6 +10,8 @@
     <copyright>Copyright © 2024</copyright>
     <tags>chrome chromium native embedded browser CEF nativepackage linux</tags>
     <license type="file">LICENSE.txt</license>
+    <repository type="git" url="https://github.com/haltroy/cef.bin.linux.git" />
+    <projectUrl>https://github.com/OutSystems/cef.redist.osx</projectUrl>
   </metadata>
   <files>
     <file src="package-$id$\**\*.*" />
