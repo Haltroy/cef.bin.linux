@@ -25,7 +25,7 @@ if [ ! -f "$CEFZIP" ]; then
     then
     	curl -o "$CEFZIP" "https://cef-builds.spotifycdn.com/cef_binary_120.1.8%2Bge6b45b0%2Bchromium-120.0.6099.109_${ARCH}_minimal.tar.bz2"
     else
-    	aria2c -o "$CEFZIP" "https://cef-builds.spotifycdn.com/cef_binary_120.1.8%2Bge6b45b0%2Bchromium-120.0.6099.109_${ARCH}_minimal.tar.bz2"
+    	aria2c -c -o "$CEFZIP" "https://cef-builds.spotifycdn.com/cef_binary_120.1.8%2Bge6b45b0%2Bchromium-120.0.6099.109_${ARCH}_minimal.tar.bz2"
     fi
 fi
 
