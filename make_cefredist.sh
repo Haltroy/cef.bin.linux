@@ -1,10 +1,11 @@
 TMP="tmp-$1"
 OUTPUT="./package-$1"
+ARCH="linux64"
 
-if [ "$1" == "linux64" ]; then 
-    ARCH="linux64";
+if [ "$1" = "linux64" ]; then
+    ARCH="linux64"
 else
-    ARCH="linuxarm64";
+    ARCH="linuxarm64"
 fi
 
 if [ ! -d "$TMP" ]; then
@@ -21,12 +22,7 @@ CEFBINARIES="cef_binaries"
 
 if [ ! -f "$CEFZIP" ]; then
     echo "downloading cef binaries"
-    if ! command -v aria2c &> /dev/null
-    then
-    	curl -o "$CEFZIP" "https://cef-builds.spotifycdn.com/cef_binary_120.1.8%2Bge6b45b0%2Bchromium-120.0.6099.109_${ARCH}_minimal.tar.bz2"
-    else
-    	aria2c -c -o "$CEFZIP" "https://cef-builds.spotifycdn.com/cef_binary_120.1.8%2Bge6b45b0%2Bchromium-120.0.6099.109_${ARCH}_minimal.tar.bz2"
-    fi
+	curl -o "$CEFZIP" "https://cef-builds.spotifycdn.com/cef_binary_120.1.8%2Bge6b45b0%2Bchromium-120.0.6099.109_${ARCH}_minimal.tar.bz2"
 fi
 
 if [ ! -d "$CEFBINARIES" ]; then
