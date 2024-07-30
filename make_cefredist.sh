@@ -2,13 +2,15 @@ TMP="tmp-$1"
 OUTPUT="./package-$1"
 ARCH="linux64"
 
-if [ "$1" = "linux64" ]; then
+if [ "$1" = "linux64" ] 
+then
     ARCH="linux64"
 else
     ARCH="linuxarm64"
 fi
 
-if [ ! -d "$TMP" ]; then
+if [ ! -d "$TMP" ]
+then
     mkdir "$TMP"
 fi
 
@@ -20,12 +22,14 @@ mkdir ".$OUTPUT"
 CEFZIP="cef.tar.bz2"
 CEFBINARIES="cef_binaries"
 
-if [ ! -f "$CEFZIP" ]; then
+if [ ! -f "$CEFZIP" ]
+then
     echo "downloading cef binaries"
 	curl -o "$CEFZIP" "https://cef-builds.spotifycdn.com/cef_binary_120.1.8%2Bge6b45b0%2Bchromium-120.0.6099.109_${ARCH}_minimal.tar.bz2"
 fi
 
-if [ ! -d "$CEFBINARIES" ]; then
+if [ ! -d "$CEFBINARIES" ]
+then
     echo "unzipping cef binaries"
     mkdir "$CEFBINARIES"
     tar -jxvf "$CEFZIP" -C "./$CEFBINARIES"
@@ -34,7 +38,8 @@ echo "copying cef binaries"
 cp -va "${PWD}/$(find $CEFBINARIES -name "Release")/." ".$OUTPUT/CEF/"
 cd .. || exit 1
 echo "stripping cef binaries"
-if [ "$1" == "linux64" ]; then 
+if [ "$1" == "linux64" ]
+then 
 	strip -v -s "${OUTPUT}/CEF/libcef.so"
 	strip -v -s "${OUTPUT}/CEF/libEGL.so"
 	strip -v -s "${OUTPUT}/CEF/libGLESv2.so"
